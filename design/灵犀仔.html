@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>灵犀仔 · 极光发光核</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --color-bg:        #f6f3ee;
+    --color-bg-2:      #efe9e0;
+    --color-surface:   #fffdfa;
+    --color-ink:       #2c2a27;
+    --color-muted:     #938b80;
+    --color-accent:    #46b3c4;            /* refined teal 冷青（去橙） */
+    --color-accent-2:  #8fd9e4;
+    --color-accent-soft: rgba(70,179,196,.14);
+    --color-line:      rgba(44,42,39,.12);
+    --radius-md: 18px; --radius-lg: 30px;
+    --space-3: 16px; --space-4: 24px; --space-5: 40px;
+    --shadow-1: 0 2px 10px rgba(60,55,48,.08);
+    --shadow-2: 0 18px 50px rgba(60,55,48,.14);
+    --shadow-3: 0 34px 90px rgba(60,55,48,.20);
+    --ease-out: cubic-bezier(0.16,1,0.3,1);
+    --dur-fast: 160ms; --dur-base: 320ms;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ -webkit-font-smoothing:antialiased; }
+  body{
+    font-family:"Noto Sans SC","Fredoka",system-ui,sans-serif; color:var(--color-ink);
+    background:
+      radial-gradient(55rem 38rem at 12% -8%, rgba(70,179,196,.12), transparent 60%),
+      radial-gradient(50rem 38rem at 100% 0%, rgba(150,140,200,.10), transparent 55%),
+      var(--color-bg);
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:var(--space-5) var(--space-3);
+  }
+  .stage{ width:min(980px,100%); display:grid; grid-template-columns:1fr 1fr; gap:var(--space-5); align-items:center; }
+  @media (max-width:780px){ .stage{ grid-template-columns:1fr; } }
+
+  .hero-card{
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(34rem 26rem at 50% 26%, rgba(143,217,228,.22), transparent 68%),
+      radial-gradient(30rem 24rem at 80% 90%, rgba(196,182,224,.20), transparent 70%),
+      linear-gradient(165deg, #fffdfa 0%, #f3efe9 100%);
+    border:1px solid var(--color-line);
+    border-radius:var(--radius-lg); box-shadow:var(--shadow-2);
+    padding:var(--space-5) var(--space-4) var(--space-4);
+  }
+  .hero-card::before{ content:""; position:absolute; inset:14px; border:1px solid rgba(44,42,39,.07); border-radius:var(--radius-md); pointer-events:none; }
+  .tag{ display:inline-flex; align-items:center; gap:6px; font-family:"Fredoka",sans-serif; font-weight:500; font-size:13px; letter-spacing:.08em; color:var(--color-accent); background:var(--color-accent-soft); padding:4px 12px; border-radius:999px; }
+  .tag .dot{ width:7px; height:7px; border-radius:50%; background:var(--color-accent); box-shadow:0 0 8px var(--color-accent-2); }
+  .hero-card h1{ font-family:"Fredoka",sans-serif; font-weight:600; font-size:40px; line-height:1; letter-spacing:-.02em; margin:14px 0 6px; color:var(--color-ink); }
+  .hero-card .sub{ color:var(--color-muted); font-size:14px; line-height:1.6; font-weight:300; }
+
+  /* ===== 极光发光核舞台 ===== */
+  .bot-stage{ display:flex; align-items:center; justify-content:center; margin-top:var(--space-4); padding:18px 0 8px; }
+  .core-orb{ position:relative; width:240px; height:262px; cursor:pointer; }
+
+  /* 球后淡彩极光斑 */
+  .orb-aura{ position:absolute; inset:-26px; border-radius:50%;
+    background:
+      radial-gradient(40% 40% at 32% 30%, rgba(191,234,228,.55), transparent 70%),
+      radial-gradient(42% 42% at 72% 68%, rgba(229,220,244,.55), transparent 70%),
+      radial-gradient(38% 38% at 60% 32%, rgba(207,228,255,.55), transparent 70%);
+    filter:blur(18px); z-index:0;
+  }
+  .core-orb svg{ position:relative; z-index:2; width:100%; height:auto; display:block; overflow:visible; }
+  .orb-spark{ position:absolute; inset:0; z-index:3; pointer-events:none; }
+  .orb-spark i{ position:absolute; width:6px; height:6px; border-radius:50%; background:var(--color-accent-2); box-shadow:0 0 8px var(--color-accent-2); }
+
+  @media (prefers-reduced-motion: no-preference){
+    .bot-float{ animation: float 5s ease-in-out infinite; transform-origin:center bottom; }
+    .core-face{ animation: eyeGlow 3.4s ease-in-out infinite; }
+    .core-ring{ animation: ringSpin 16s linear infinite; transform-origin:120px 132px; }
+    .core-shine{ animation: shine 4.5s ease-in-out infinite; }
+    .orb-spark i:nth-child(1){ top:9%;  left:13%; animation: twinkle 2.8s ease-in-out infinite; }
+    .orb-spark i:nth-child(2){ top:21%; right:9%; animation: twinkle 3.2s ease-in-out .6s infinite; }
+    .orb-spark i:nth-child(3){ bottom:15%; left:10%; animation: twinkle 2.6s ease-in-out 1.1s infinite; }
+    .orb-spark i:nth-child(4){ bottom:23%; right:14%; animation: twinkle 3s ease-in-out 1.6s infinite; }
+    .hero-card{ transition: box-shadow var(--dur-base) var(--ease-out); }
+    .hero-card:hover{ box-shadow:var(--shadow-3); }
+  }
+  @keyframes float{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-10px) } }
+  @keyframes eyeGlow{ 0%,100%{ opacity:1 } 50%{ opacity:.6 } }
+  @keyframes ringSpin{ to{ transform:rotate(360deg); } }
+  @keyframes shine{ 0%,100%{ opacity:.55 } 50%{ opacity:1 } }
+  @keyframes twinkle{ 0%,100%{ opacity:.25 } 50%{ opacity:1 } }
+
+  .panel-wrap{ position:relative; }
+  .panel{ background:var(--color-surface); border:1px solid var(--color-line); border-radius:var(--radius-lg); box-shadow:var(--shadow-2); padding:var(--space-4); }
+  .panel h2{ font-family:"Fredoka",sans-serif; font-size:22px; letter-spacing:-.01em; margin-bottom:4px; }
+  .panel p.hint{ color:var(--color-muted); font-size:13px; margin-bottom:var(--space-3); }
+  .bubble{ background:var(--color-bg-2); border-radius:14px 14px 14px 4px; padding:12px 14px; font-size:14px; line-height:1.6; margin-bottom:10px; border:1px solid var(--color-line); }
+  .bubble.user{ background:var(--color-accent-soft); border-radius:14px 14px 4px 14px; text-align:right; }
+  .ask{ width:100%; margin-top:6px; display:flex; gap:8px; }
+  .ask input{ flex:1; border:1px solid var(--color-line); border-radius:999px; padding:10px 16px; font:inherit; font-size:14px; background:var(--color-bg); color:var(--color-ink); outline:none; }
+  .ask input:focus-visible{ border-color:var(--color-accent); box-shadow:0 0 0 3px var(--color-accent-soft); }
+  .ask button{ border:none; cursor:pointer; border-radius:999px; padding:0 18px; font-family:"Fredoka",sans-serif; font-weight:600; font-size:14px; background:var(--color-accent); color:#06343a; transition:transform var(--dur-fast) var(--ease-out); }
+  .ask button:hover{ transform:translateY(-2px); }
+  .ask button:active{ transform:translateY(0); }
+  .tap-hint{ position:absolute; left:50%; bottom:-14px; transform:translateX(-50%); font-family:"Fredoka",sans-serif; font-size:12px; color:var(--color-muted); background:var(--color-surface); border:1px solid var(--color-line); padding:4px 12px; border-radius:999px; white-space:nowrap; }
+  .spec-list{ margin-top:var(--space-4); display:grid; gap:10px; }
+  .spec-list li{ list-style:none; font-size:13px; color:var(--color-muted); display:flex; gap:8px; align-items:baseline; }
+  .spec-list b{ color:var(--color-ink); font-weight:600; }
+</style>
+</head>
+<body>
+  <main class="stage">
+    <!-- 左：极光发光核舞台 -->
+    <section class="hero-card" aria-label="灵犀仔角色特写">
+      <span class="tag"><span class="dot"></span>LINGXI ZAI</span>
+      <h1>灵犀仔</h1>
+      <p class="sub">极光发光核 · 悬浮镀铬环 · 淡彩极光<br/>你认可过的浅色高级语言，无身体，干净特别。</p>
+
+      <div class="bot-stage">
+        <div class="core-orb bot-float" id="lingxiOrb" role="img" aria-label="灵犀仔极光发光核" tabindex="0">
+          <div class="orb-aura"></div>
+          <!-- ===== 极光发光核 SVG：珍珠球体 + 悬浮镀铬环 + 冷青柔脸 ===== -->
+          <svg viewBox="0 0 240 262" aria-hidden="true">
+            <defs>
+              <radialGradient id="aurora" cx=".5" cy=".5" r=".5">
+                <stop offset="0"   stop-color="#bfeae4"/>
+                <stop offset=".4"  stop-color="#d4e6f6"/>
+                <stop offset=".72" stop-color="#e5dcf4"/>
+                <stop offset="1"   stop-color="#e5dcf4" stop-opacity="0"/>
+              </radialGradient>
+              <!-- 珍珠球体：白→浅灰柔光，内置极淡极光透出 -->
+              <radialGradient id="pearl" cx=".4" cy=".32" r=".85">
+                <stop offset="0"   stop-color="#ffffff"/>
+                <stop offset=".42" stop-color="#f1f6f8"/>
+                <stop offset=".72" stop-color="#e4edf1"/>
+                <stop offset="1"   stop-color="#d2dde4"/>
+              </radialGradient>
+              <radialGradient id="pearlInner" cx=".5" cy=".5" r=".5">
+                <stop offset="0"   stop-color="#dff1ee" stop-opacity=".5"/>
+                <stop offset=".5"  stop-color="#dbe7f7" stop-opacity=".35"/>
+                <stop offset="1"   stop-color="#e7def6" stop-opacity="0"/>
+              </radialGradient>
+              <!-- 镀铬金属环：银→白→灰多层，金属质感 -->
+              <linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0"   stop-color="#ffffff"/>
+                <stop offset=".32" stop-color="#dfe5ea"/>
+                <stop offset=".55" stop-color="#aab2bc"/>
+                <stop offset=".74" stop-color="#eef2f5"/>
+                <stop offset="1"   stop-color="#8b939d"/>
+              </linearGradient>
+              <radialGradient id="coreHi" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+                <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="soft"><feGaussianBlur stdDeviation="3.4"/></filter>
+              <filter id="glow"><feGaussianBlur stdDeviation="5"/></filter>
+            </defs>
+
+            <!-- 背后极光柔光 -->
+            <circle cx="120" cy="132" r="112" fill="url(#aurora)" opacity=".7"/>
+            <!-- 落地冷灰投影（非黑） -->
+            <ellipse cx="120" cy="242" rx="54" ry="9" fill="#5a6470" opacity=".12"/>
+
+            <!-- 悬浮镀铬环（绕球后，整环在球下层；缓旋） -->
+            <g class="core-ring">
+              <ellipse cx="120" cy="132" rx="98" ry="40" fill="none" stroke="url(#chrome)" stroke-width="9"/>
+              <ellipse cx="120" cy="132" rx="98" ry="40" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.2" stroke-dasharray="60 300" transform="rotate(-26 120 132)"/>
+            </g>
+
+            <!-- 珍珠球体 -->
+            <circle cx="120" cy="132" r="62" fill="url(#pearl)"/>
+            <circle cx="120" cy="132" r="62" fill="url(#pearlInner)"/>
+            <!-- 球体高光弧（左上柔光） -->
+            <ellipse class="core-shine" cx="100" cy="104" rx="30" ry="18" fill="url(#coreHi)" transform="rotate(-24 100 104)"/>
+            <!-- 球体底部体积微阴 -->
+            <path d="M72 158 A62 62 0 0 0 168 158" fill="none" stroke="rgba(120,150,170,.18)" stroke-width="10" filter="url(#soft)"/>
+
+            <!-- 冷青柔脸（封印在核内，柔和发光） -->
+            <g class="core-face">
+              <circle cx="103" cy="128" r="13" fill="var(--color-accent)" opacity=".20" filter="url(#glow)"/>
+              <circle cx="137" cy="128" r="13" fill="var(--color-accent)" opacity=".20" filter="url(#glow)"/>
+              <circle cx="103" cy="128" r="7.5" fill="var(--color-accent)"/>
+              <circle cx="137" cy="128" r="7.5" fill="var(--color-accent)"/>
+              <circle cx="105" cy="125" r="2.6" fill="#fff"/>
+              <circle cx="139" cy="125" r="2.6" fill="#fff"/>
+              <path d="M108 142 Q120 151 132 142" stroke="var(--color-accent)" stroke-width="2.8" fill="none" stroke-linecap="round" opacity=".85"/>
+            </g>
+          </svg>
+          <div class="orb-spark"><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右：悬浮助手问答演示 -->
+    <section class="panel-wrap">
+      <div class="panel" id="qaPanel">
+        <h2>灵犀仔 · 悬浮助手</h2>
+        <p class="hint">点击左侧发光核即可唤起；这里演示问答窗形态。</p>
+        <div class="bubble">你好，我是灵犀仔 ✨ 需要比价、查供应商资质还是看行情？</div>
+        <div class="bubble user">帮我找螺纹钢 RB 的低价供应商</div>
+        <div class="bubble">已锁定 3 家信用 A 级供应商，均价较上月低 4.2%，是否进入谈判？</div>
+        <form class="ask" onsubmit="return false;">
+          <input type="text" placeholder="问点什么…" aria-label="输入问题" />
+          <button type="submit">发送</button>
+        </form>
+      </div>
+      <span class="tap-hint">点核 → 展开问答</span>
+
+      <ul class="spec-list">
+        <li><b>珍珠发光核</b>：白→浅灰柔光球体，内置极淡极光，干净不普通</li>
+        <li><b>悬浮镀铬环</b>：银→白→灰多层金属环，缓旋，高级记忆点</li>
+        <li><b>淡彩极光</b>：薄荷/天蓝/薰衣草透出，特别不俗</li>
+        <li><b>冷青柔脸</b>：去橙去黑，核内柔和发光眼 + 微笑</li>
+        <li><b>光尘粒子</b>：四角微光 twinkle，灵动不死板</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    const orb = document.getElementById('lingxiOrb');
+    const panel = document.getElementById('qaPanel');
+    function wake(){ panel.style.boxShadow = 'var(--shadow-3)'; panel.style.transform = 'translateY(-4px)'; }
+    orb.addEventListener('click', wake);
+    orb.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); wake(); } });
+  </script>
+</body>
+</html>

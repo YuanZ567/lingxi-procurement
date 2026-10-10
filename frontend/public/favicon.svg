@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 灵犀采购 favicon：灵犀仔头像（珍珠球 + 镀铬环 + 青色眼笑） -->
+  <defs>
+    <!-- 底板：品牌青色渐变，浅色标签栏上白色球体才够醒目 -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5ecadb"/>
+      <stop offset="1" stop-color="#0f6b7a"/>
+    </linearGradient>
+    <!-- 珍珠球体：左上高光的白珍珠 -->
+    <radialGradient id="pearl" cx=".38" cy=".3" r=".9">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".55" stop-color="#f1f6f8"/>
+      <stop offset="1" stop-color="#cfdde4"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 圆角底板 -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bg)"/>
+
+  <!-- 镀铬悬浮环（斜椭圆，绕球一圈） -->
+  <ellipse cx="32" cy="33" rx="24" ry="9.5" fill="none"
+           stroke="rgba(255,255,255,.55)" stroke-width="3"
+           transform="rotate(-14 32 33)"/>
+
+  <!-- 珍珠球体 -->
+  <circle cx="32" cy="33" r="15.5" fill="url(#pearl)"/>
+
+  <!-- 灵犀仔的脸：两只青色眼睛（带高光点）+ 微笑 -->
+  <circle cx="26.5" cy="31.5" r="2.6" fill="#1d8ba0"/>
+  <circle cx="37.5" cy="31.5" r="2.6" fill="#1d8ba0"/>
+  <circle cx="27.3" cy="30.7" r=".9" fill="#ffffff"/>
+  <circle cx="38.3" cy="30.7" r=".9" fill="#ffffff"/>
+  <path d="M27 38 Q32 42.5 37 38" stroke="#1d8ba0" stroke-width="2"
+        fill="none" stroke-linecap="round"/>
+</svg>

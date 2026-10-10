@@ -1,0 +1,12 @@
+chroma_db/
+__pycache__/
+*.pyc
+.env
+logs/
+
+.workbuddy/
+.idea/
+node_modules/
+frontend/node_modules/
+frontend/dist/
+*.log

@@ -1,0 +1,10 @@
+%% 灵犀采购 · 问答子 Graph（独立于主业务流水线）mermaid 流程图
+flowchart LR
+    Q[用户自然语言提问] --> R[qa_router<br/>意图识别]
+    R -->|结构化业务查询| S[nl2sql<br/>生成 SQL → 校验 → 执行]
+    R -->|知识库/文档查询| H[hybrid_retriever<br/>BM25 + 向量 RRF 融合]
+    R -->|复杂多跳问题| A[agentic_retrieval<br/>迭代检索]
+    S --> F[final_answer<br/>LLM 组织回答 + 溯源卡片]
+    H --> F
+    A --> F
+    F --> SSE[SSE 流式返回前端]

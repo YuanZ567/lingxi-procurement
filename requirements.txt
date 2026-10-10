@@ -1,0 +1,53 @@
+# ============================================================
+# 灵犀采购 LinXi-Procure · 依赖清单
+# ------------------------------------------------------------
+# 环境：D:\Pycharm\python\python.exe  (Python 3.14.0)
+# 全部 18 个依赖均已安装并验证可 import（2026-08-31 核对）
+# 重新安装：D:\Pycharm\python\python.exe -m pip install -r requirements.txt
+# ============================================================
+
+# ---------- Web 框架 ----------
+fastapi==0.141.1
+uvicorn==0.51.0
+sse-starlette==3.4.8
+python-multipart==0.0.32
+
+# ---------- LLM 编排 ----------
+langgraph==1.2.9
+langchain-core==1.6.1
+langchain-openai==1.6.0
+langchain-alibaba>=0.1            # src/utils/llm.py 的 ChatAlibaba 客户端（此前漏声明）
+langgraph-checkpoint-redis>=0.5   # 主图 Redis Checkpoint（AsyncRedisSaver），9/5 全链路验证必需
+# 注意：langgraph-checkpoint-redis 锁 redis<8，redis 版本不要升到 8.x
+
+# ---------- ORM / 数据库 ----------
+SQLAlchemy==2.0.49
+PyMySQL==1.2.0
+
+# ---------- 缓存 / 并发 ----------
+redis==7.4.1
+
+# ---------- RAG ----------
+chromadb==1.5.9
+rank-bm25==0.2.2
+jieba==0.42.1
+pandas==2.3.3
+openpyxl==3.1.5
+
+# ---------- 配置 / 工具 ----------
+python-dotenv==1.2.2
+pydantic-settings==2.14.1
+tenacity==9.1.4
+
+# ---------- 测试 ----------
+pytest==9.1.1
+pytest-cov            # 覆盖率统计（pytest.ini addopts 已启用）
+pytest-asyncio        # 异步用例（asyncio_mode=auto，NL2SQL 安全闸等 async 用例）
+httpx==0.28.1         # FastAPI TestClient 底层
+
+# ---------- 数据采集（一次性初始化爬虫用，运行时禁止联网） ----------
+requests==2.34.2
+beautifulsoup4>=4.12
+
+# ---------- 实时行情（9/16 起 /api/market 每次调用前自动抓当天价） ----------
+akshare>=1.14            # 新浪期货实时盘口（src/data/market_provider.py 三级接力的"实时"级）

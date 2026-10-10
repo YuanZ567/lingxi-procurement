@@ -1,0 +1,174 @@
+<html style="margin:0;padding:0;">
+<div style="background-color:transparent;box-sizing:border-box;">
+<div style="font-family:'Roboto','PingFang SC','Segoe UI',Arial,sans-serif;color:#1A1B1C;--accent:#9EACEA;padding:4px 0;">
+
+  <!-- 图1：五层系统架构 -->
+  <div style="font-size:15px;font-weight:600;margin:8px 0 6px;">图1 · 灵犀采购五层系统架构</div>
+
+  <div style="border:1px solid rgba(0,0,0,0.08);border-radius:14px;overflow:hidden;margin-bottom:10px;">
+    <!-- 第1层 前端 -->
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:rgba(158,172,234,0.10);border-bottom:1px solid rgba(0,0,0,0.06);">
+      <div style="flex:0 0 92px;font-size:13px;font-weight:600;color:#4a56a0;">① 前端层</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;flex:1 1 200px;min-width:0;">
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">Vue3</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">TailwindCSS</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">ECharts 看板</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">悬浮问答助手</span>
+      </div>
+      <div style="flex:1 1 220px;min-width:0;font-size:11px;color:#6B7280;">任务控制台 + 数据看板 + Agent工作流直播 + 右下角灵犀仔（SSE流式）</div>
+    </div>
+    <!-- 第2层 服务 -->
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:rgba(158,172,234,0.06);border-bottom:1px solid rgba(0,0,0,0.06);">
+      <div style="flex:0 0 92px;font-size:13px;font-weight:600;color:#4a56a0;">② 服务层</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;flex:1 1 200px;min-width:0;">
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">FastAPI</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">SSE 流式推送</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">Harness 可靠性</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">Redis 缓存/并发</span>
+      </div>
+      <div style="flex:1 1 220px;min-width:0;font-size:11px;color:#6B7280;">接口：创建/查询任务、SSE进度、问答；重试·超时·降级·校验四件套</div>
+    </div>
+    <!-- 第3层 智能编排 -->
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:rgba(158,172,234,0.10);border-bottom:1px solid rgba(0,0,0,0.06);">
+      <div style="flex:0 0 92px;font-size:13px;font-weight:600;color:#4a56a0;">③ 编排层</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;flex:1 1 200px;min-width:0;">
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">主业务 Graph</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">问答子 Graph</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">Hybrid-RAG</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">Agentic-RAG</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">NL2SQL</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">分层记忆</span>
+      </div>
+      <div style="flex:1 1 220px;min-width:0;font-size:11px;color:#6B7280;">LangGraph 双图：Orchestrator 主编排 1主+4业务+还价+反思；子Agent互不通信</div>
+    </div>
+    <!-- 第4层 数据 -->
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:rgba(158,172,234,0.06);border-bottom:1px solid rgba(0,0,0,0.06);">
+      <div style="flex:0 0 92px;font-size:13px;font-weight:600;color:#4a56a0;">④ 数据层</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;flex:1 1 200px;min-width:0;">
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">MySQL 8张表</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">Chroma 向量库</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">Redis Checkpoint</span>
+      </div>
+      <div style="flex:1 1 220px;min-width:0;font-size:11px;color:#6B7280;">任务/谈判/成本/订单/供应商/行情/库存/知识库元数据 + 知识片段向量化</div>
+    </div>
+    <!-- 第5层 外部数据 -->
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:rgba(158,172,234,0.10);">
+      <div style="flex:0 0 92px;font-size:13px;font-weight:600;color:#4a56a0;">⑤ 外部数据</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;flex:1 1 200px;min-width:0;">
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">akshare 期货行情</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">白牛商查 80家企业</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">政采网成交公告</span>
+        <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.10);">公开行业知识库</span>
+      </div>
+      <div style="flex:1 1 220px;min-width:0;font-size:11px;color:#6B7280;">真实公开行情+工商档案一次性导入；运行时三级接力取价，断网自动降级读库</div>
+    </div>
+  </div>
+
+  <!-- 图2：主业务 Graph 流程 -->
+  <div style="font-size:15px;font-weight:600;margin:16px 0 6px;">图2 · 主业务 Graph：一次采购任务的完整旅程</div>
+  <svg viewBox="0 0 1000 700" style="width:100%;max-width:980px;height:auto;display:block;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arw" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#4a56a0"/></marker>
+      <marker id="arwr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C05621"/></marker>
+      <marker id="arwg" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6B7280"/></marker>
+    </defs>
+
+    <!-- START -->
+    <rect x="20" y="18" width="76" height="34" rx="17" fill="#1A1B1C"/>
+    <text x="58" y="40" font-size="13" fill="#FFFFFF" text-anchor="middle">START</text>
+    <line x1="96" y1="35" x2="248" y2="35" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+
+    <!-- Orchestrator 横条 -->
+    <rect x="250" y="16" width="500" height="40" rx="10" fill="#9EACEA"/>
+    <text x="500" y="41" font-size="14" font-weight="600" fill="#1A1B1C" text-anchor="middle">Orchestrator 主编排 Agent · 拆解 / 派发 / 聚合 / 预算锁定 / AI总裁总结</text>
+
+    <!-- 业务节点定义 -->
+    <!-- 1 market -->
+    <rect x="250" y="92" width="500" height="58" rx="10" fill="#FFFFFF" stroke="#9EACEA" stroke-width="1.5"/>
+    <text x="272" y="114" font-size="13" font-weight="600" fill="#1A1B1C">① 市场情报 Agent</text>
+    <text x="272" y="134" font-size="11" fill="#6B7280">读行情/库存/供应商 → 市场基准价 + 候选供应商 + 紧迫度</text>
+    <line x1="500" y1="56" x2="500" y2="90" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="508" y="78" font-size="11" fill="#4a56a0">①派发</text>
+
+    <!-- 2 cost -->
+    <rect x="250" y="166" width="500" height="58" rx="10" fill="#FFFFFF" stroke="#9EACEA" stroke-width="1.5"/>
+    <text x="272" y="188" font-size="13" font-weight="600" fill="#1A1B1C">② 成本核算 Agent</text>
+    <text x="272" y="208" font-size="11" fill="#6B7280">基准价×数量 + 资金占用 → 预算结余 / 超支标记 is_over_budget</text>
+    <line x1="500" y1="150" x2="500" y2="164" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="508" y="161" font-size="11" fill="#4a56a0">②派发</text>
+
+    <!-- 3 negotiation -->
+    <rect x="250" y="240" width="500" height="58" rx="10" fill="#FFFFFF" stroke="#9EACEA" stroke-width="1.5"/>
+    <text x="272" y="262" font-size="13" font-weight="600" fill="#1A1B1C">③ 谈判博弈 Agent</text>
+    <text x="272" y="282" font-size="11" fill="#6B7280">预算天花板内报价+话术 → 锁定目标供应商（预算硬约束程序兜底）</text>
+    <line x1="500" y1="224" x2="500" y2="238" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="508" y="235" font-size="11" fill="#4a56a0">③派发</text>
+
+    <!-- 4 counter -->
+    <rect x="250" y="314" width="500" height="58" rx="10" fill="#F4F3EE" stroke="#C05621" stroke-width="1.4"/>
+    <text x="272" y="336" font-size="13" font-weight="600" fill="#1A1B1C">④ 供应商还价 Agent（对抗模拟）</text>
+    <text x="272" y="356" font-size="11" fill="#6B7280">底价=基准价×溢价×0.98 程序判定 → 成交 / 还价 / 轮次耗尽</text>
+    <line x1="500" y1="298" x2="500" y2="312" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="508" y="309" font-size="11" fill="#4a56a0">谈判完成</text>
+
+    <!-- 5 reflector -->
+    <rect x="250" y="388" width="500" height="58" rx="10" fill="#F4F3EE" stroke="#9BBBF4" stroke-width="1.4"/>
+    <text x="272" y="410" font-size="13" font-weight="600" fill="#1A1B1C">⑤ 元认知反思 Agent（复盘教练）</text>
+    <text x="272" y="430" font-size="11" fill="#6B7280">被拒→归因+策略修正写 reflection_note 注入下一轮；成交/耗尽→清空放行</text>
+    <line x1="500" y1="372" x2="500" y2="386" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="508" y="383" font-size="11" fill="#4a56a0">判定后复盘</text>
+
+    <!-- 6 risk -->
+    <rect x="250" y="462" width="500" height="58" rx="10" fill="#FFFFFF" stroke="#9EACEA" stroke-width="1.5"/>
+    <text x="272" y="484" font-size="13" font-weight="600" fill="#1A1B1C">⑥ 风控审批 Agent</text>
+    <text x="272" y="504" font-size="11" fill="#6B7280">三重校验：预算合规 + 供应商风险 + 合同条款 → pass / reject / manual</text>
+    <line x1="500" y1="446" x2="500" y2="460" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="508" y="457" font-size="11" fill="#4a56a0">成交/耗尽</text>
+
+    <!-- 7 final -->
+    <rect x="250" y="548" width="500" height="58" rx="10" fill="#FFFFFF" stroke="#9EACEA" stroke-width="1.5"/>
+    <text x="272" y="570" font-size="13" font-weight="600" fill="#1A1B1C">⑦ Orchestrator 聚合输出</text>
+    <text x="272" y="590" font-size="11" fill="#6B7280">完整采购方案（市场/成本/谈判/风控）+ AI总裁结论（LLM只总结不算数）</text>
+    <line x1="500" y1="520" x2="500" y2="546" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+    <text x="508" y="537" font-size="11" fill="#4a56a0">审批通过</text>
+
+    <!-- END -->
+    <rect x="420" y="622" width="160" height="34" rx="17" fill="#1A1B1C"/>
+    <text x="500" y="644" font-size="13" fill="#FFFFFF" text-anchor="middle">END · 方案落库</text>
+    <line x1="500" y1="606" x2="500" y2="620" stroke="#4a56a0" stroke-width="1.6" marker-end="url(#arw)"/>
+
+    <!-- 回环A：counter 未成交 → negotiation -->
+    <path d="M250,343 C120,343 120,269 250,269" fill="none" stroke="#C05621" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arwr)"/>
+    <text x="70" y="318" font-size="11" fill="#C05621">回环A 未成交：按底价加价重谈</text>
+    <text x="70" y="333" font-size="11" fill="#C05621">（轮次上限3轮，超预算永不回环）</text>
+
+    <!-- 回环B：risk manual 高风险 → negotiation -->
+    <path d="M250,491 C100,491 100,269 250,269" fill="none" stroke="#C05621" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arwr)"/>
+    <text x="36" y="400" font-size="11" fill="#C05621">回环B 供应商高风险：</text>
+    <text x="36" y="415" font-size="11" fill="#C05621">踢除换未谈供应商重谈（≤1次）</text>
+
+    <!-- 分支：reject 拦截 -->
+    <rect x="790" y="446" width="180" height="44" rx="10" fill="#FDE8E8" stroke="#EA6668" stroke-width="1.4"/>
+    <text x="880" y="464" font-size="12" font-weight="600" fill="#C0392B" text-anchor="middle">reject 超支拦截</text>
+    <text x="880" y="481" font-size="11" fill="#C0392B" text-anchor="middle">终止自动流程</text>
+    <line x1="750" y1="472" x2="788" y2="468" stroke="#EA6668" stroke-width="1.6" marker-end="url(#arwr)"/>
+    <text x="756" y="462" font-size="11" fill="#C0392B">超预算</text>
+
+    <!-- 分支：manual 人工 -->
+    <rect x="790" y="546" width="180" height="44" rx="10" fill="#FEF3E2" stroke="#FAAD14" stroke-width="1.4"/>
+    <text x="880" y="564" font-size="12" font-weight="600" fill="#B7791F" text-anchor="middle">manual 人工审批</text>
+    <text x="880" y="581" font-size="11" fill="#B7791F" text-anchor="middle">轮次耗尽/风险项</text>
+    <line x1="750" y1="500" x2="880" y2="544" stroke="#FAAD14" stroke-width="1.6" marker-end="url(#arwr)"/>
+    <text x="762" y="520" font-size="11" fill="#B7791F">其他风险</text>
+
+    <!-- 预算红线底部条 -->
+    <rect x="60" y="664" width="880" height="26" rx="8" fill="rgba(158,172,234,0.18)" stroke="#9EACEA" stroke-width="1.2"/>
+    <text x="500" y="682" font-size="12" font-weight="600" fill="#4a56a0" text-anchor="middle">预算红线 budget_limit：任务初始化锁定，全局只读 · 测算/谈判/审批全链路刚性约束 · 任何 Agent 不得改写</text>
+
+    <!-- 图例 -->
+    <text x="60" y="704" font-size="11" fill="#6B7280">图例：实线=主线流程；橙色虚线=回环（未成交重谈/换商）；每个业务节点执行完统一回归 Orchestrator 路由（代码真实行为）</text>
+  </svg>
+
+</div>
+</div>
+</html>

@@ -1,0 +1,15 @@
+@tailwind base;      /* Tailwind 基础样式（清零默认 margin 等） */
+@tailwind components; /* 组件层（可放复用组件样式） */
+@tailwind utilities;   /* 原子类（bg-ink、flex、p-4 这些） */
+
+:root {              /* 全局 CSS 变量，和后端配色保持一致 */
+  --color-accent: #46b3c4;        /* 冷青强调色 */
+  --color-accent-2: #8fd9e4;      /* 更亮的青，用于发光 */
+}
+
+body {              /* 页面底色与字体 */
+  margin: 0;
+  background: var(--color-bg, #f6f3ee);
+  font-family: "Noto Sans SC", system-ui, sans-serif;  /* 中文优先字体 */
+  color: #2c2a27;
+}

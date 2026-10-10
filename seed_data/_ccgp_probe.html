@@ -1,0 +1,634 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>采购公告搜索_中国政府采购网</title>
+    <link href="/static/css/style4.css" rel="stylesheet" type="text/css"/>
+
+    <link href="/static/css/data4.css" rel="stylesheet" type="text/css"/>
+    <script>
+        var path = "/";
+        var basePath = "//search.ccgp.gov.cn/";
+        var staticPath = path + "static/";
+        var dateTy = '5';
+        var bidType = '0';
+        var bidSort = '0';
+        var pinMu = '0';
+        var searchtype = '1';
+        var kw = '铜材';
+        var buyerName = '';
+        var projectId = '';
+        var zoneId = '';
+        var displayZone = '';
+        var agentName = '';
+        var pppStatus = '0';
+        var start_time = '';
+        var end_time = '';
+        var page_index=1;
+
+
+    </script>
+
+    <script type="text/javascript" src="/static/js/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/data4.js"></script>
+    <script type="text/javascript" src="/static/js/page.js"></script>
+    <script type="text/javascript" src="/static/js/laydate/laydate.js"></script>
+</head>
+<body style="background:#fff">
+
+<link href="//www.ccgp.gov.cn/css/inc.css" rel="stylesheet" type="text/css" />
+<div class="v4incheadertop">
+    <div class="v4incheadertop_tel_block">
+        <div class="v4incheadertop_tel">
+            <p class="cl">财政部唯一指定政府采购信息网络发布媒体 国家级政府采购专业网站</p><p class="cr">服务热线：400-810-1996  &nbsp; | &nbsp; 服务投诉：010-63819289</p>
+        </div>
+    </div>
+    <div class="v4incheadertop_logosearch_block2">
+        <div class="v4incheadertop_logosearch">
+        <div class="searcharea1">
+            <div class="logo_gh" style="margin-top:20px">
+            <a href="#" class="ccgp"></a>
+            <a href="#" class="ccgp2"></a>
+            <a href="#" class="gmfw"></a>
+            <a href="#" class="ccgp3"></a>
+            </div>
+        </div>
+
+        <div class="searcharea2">
+            <div class="sangong_bl"></div>
+
+        </div></div>
+    </div>
+    <div class="v4incheadertop_nav_block">
+        <div class="v4incheadertop_nav">
+            <ul class="v4incheadertop_nav_ls">
+                <li  id="ch_index" style="width:140px"><a href="//www.ccgp.gov.cn/">首页</a></li>
+                <li id="ch_zcfg" style="width: 172px"><a href="//www.ccgp.gov.cn/zcfg/">政采法规</a></li>
+                <li id="ch_gmfw" style="width:172px"><a href="//www.ccgp.gov.cn/gpsr/">购买服务</a></li>
+                <li id="ch_jdjc" style="width:172px"><a href="//www.ccgp.gov.cn/jdjc/">监督检查</a></li>
+                <li id="ch_xxgg" style="width:172px"><a href="//www.ccgp.gov.cn/xxgg/">信息公告</a></li>
+                <li id="ch_gpa" style="width:172px"><a href="//www.ccgp.gov.cn/wtogpa/">国际专栏</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="clb"></div>
+</div>
+
+<div class="vT_z">
+    <div style="width:100%;background:#ccc">
+        <ul class="vT_search_sortby">
+            <li>
+                <a href="//search.ccgp.gov.cn/znzxsearch?searchtype=1&page_index=1&searchchannel=0&kw=铜材&timeType=0">站内资讯</a>
+            </li>
+            <li class="current2">采购公告</li>
+            <li><a href="//search.ccgp.gov.cn/zcfgsearch">政策法规</a></li>
+        </ul>
+    </div>
+</div>
+<span class="blank37"></span>
+
+<div class="vT_z">
+    <div class="vT-srch-result-top">
+        <div class="vT-srch-result-top-logo n_fl"><img
+                src="/static/images/searchplatform_bid.gif"
+                style="border:0"></div>
+        <div class="vT-srch-result-top-form n_fr">
+            <form name="searchForm" id="searchForm" action="//search.ccgp.gov.cn/bxsearch" method="get">
+                <input type="hidden" name="searchtype" id="searchtype" value="1">
+                <input type="hidden" name="page_index" id="page_index" value="1">
+                <input type="hidden" name="bidSort" id="bidSort" value="0">
+                <input type="hidden" name="buyerName" id="buyerName" value="">
+                <input type="hidden" name="projectId" id="projectId" value="">
+                <input type="hidden" name="pinMu" id="pinMu" value="0">
+                <input type="hidden" name="bidType" id="bidType" value="0">
+                <input type="hidden" name="dbselect" value="bidx">
+                <input name="kw" id="kw" type="text" style="float:left;width:260px" value="铜材"/>
+                <input type="hidden" name="start_time" id="start_time" value="">
+                <input type="hidden" name="end_time" id="end_time" value="">
+                <input type="hidden" name="timeType" id="timeType" value="5">
+                <input type="hidden" name="displayZone" id="displayZone" value="">
+                <input type="hidden" name="zoneId" id="zoneId" value="">
+                <input type="hidden" name="pppStatus" id="pppStatus" value="0">
+                <input type="hidden" name="agentName" id="agentName" value="">
+                <input type="button" value="搜标题" id="doSearch1" onclick="validateCode(1)"
+                       style="font-size:14px;font-weight:bolder;width:70px;cursor:pointer;background:#cc0000;color:#fff;float:left;height:34px" class="main"/>
+                <input type="button" value="搜全文" id="doSearch2" onclick="validateCode(2)"
+                       style="font-size:14px;font-weight:bolder;width:70px;cursor:pointer;background:#0082d4;color:#fff;float:left;height:34px" class="main"/>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<!---->
+<span class="blank10"></span>
+
+<div class="vT_z" id="vT_bidSearch_o">
+    <div class="vT_bidSearch_outsider">
+        <!--选择内容-->
+        <div class="vT_bidSearch_addon_con" style="margin-top:20px">
+            <div class="vT_bidSearch_addon_block2" style="margin-left:0;float:left;"><p
+                    style="vertical-align:top;margin-top:0;padding-top:0">类型</p></div>
+            <div style="float:left;width:870px;height:60px">
+                <ul class="vT-srch-result-channel-list2" id="searchbidTypeSel">
+                    <li onclick="bidTypeSel(0)">所有类型</li>
+                    <li onclick="bidTypeSel(1)">公开招标</li>
+                    <li onclick="bidTypeSel(2)">询价公告</li>
+                    <li onclick="bidTypeSel(3)">竞争性谈判</li>
+                    <li onclick="bidTypeSel(4)">单一来源</li>
+                    <li onclick="bidTypeSel(5)">资格预审</li>
+                    <li onclick="bidTypeSel(6)">邀请公告</li>
+                    <li onclick="bidTypeSel(7)">中标公告</li>
+                    <li onclick="bidTypeSel(8)">更正公告</li>
+                    <li onclick="bidTypeSel(9)">其他公告</li>
+                    <li onclick="bidTypeSel(10)">竞争性磋商</li>
+                    <li onclick="bidTypeSel(11)">成交公告</li>
+                    <li onclick="bidTypeSel(12)">终止公告</li>
+                    <li onclick="isPPP()"><img src="/static/images/ppp_off.gif" title="ppp项目" id="disPPP"></li>
+                </ul>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <!--选择内容-->
+        <div class="vT_bidSearch_addon_con">
+            <div class="vT_bidSearch_addon_block2" style="margin-left:0;float:left;"><p
+                    style="vertical-align:top;margin-top:0;padding-top:15px">类别</p></div>
+            <div style="float:left;width:870px;height:30px;margin-top:15px">
+                <ul class="vT-srch-result-channel-list3" id="searchBidSortSel">
+                    <li onclick="bidSortSel(0)">所有类别</li>
+                    <li onclick="bidSortSel(1)">中央公告</li>
+                    <li onclick="bidSortSel(2)">地方公告</li>
+                </ul>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <!--选择内容-->
+        <div class="vT_bidSearch_addon_con">
+            <div class="vT_bidSearch_addon_block2" style="margin-left:0;float:left;"><p
+                    style="vertical-align:top;margin-top:0;padding-top:15px">品目</p></div>
+            <div style="float:left;width:870px;height:30px;margin-top:15px">
+                <ul class="vT-srch-result-channel-list3" id="searchPinMuSel">
+                    <li onclick="pinMuSel(0)">所有品目</li>
+                    <li onclick="pinMuSel(1)">货物类</li>
+                    <li onclick="pinMuSel(2)">工程类</li>
+                    <li onclick="pinMuSel(3)">服务类</li>
+                </ul>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <!--选择内容-->
+        <div class="vT_bidSearch_addon_con">
+            <div class="vT_bidSearch_addon_block2" style="margin-left:0;float:left;"><p
+                    style="vertical-align:top;margin-top:0;padding-top:15px">时间</p></div>
+            <div style="float:left;width:870px;height:30px;margin-top:15px;position:relative">
+                <ul class="vT-srch-result-channel-list3" id="datesel">
+                    <li onclick="timeSel(0)">今日</li>
+                    <li onclick="timeSel(1)">近3日</li>
+                    <li onclick="timeSel(2)">近1周</li>
+                    <li onclick="timeSel(3)">近1月</li>
+                    <li onclick="timeSel(4)">近3月</li>
+                    <li onclick="timeSel(5)">近半年</li>
+                    <li id="cusTime">指定时间</li>
+                </ul>
+                <div class="cusTime_container">
+                    <span>指定时间</span>
+                    <input type="text" name="inpCusStartTime" id="inpCusStartTime" readonly="readonly"
+                           value="">
+                    <input type="text" name="inpCusEndTime" id="inpCusEndTime" readonly="readonly"
+                           value="">
+                    <em class="dose" title="查询">查询</em>
+                    <em class="clos" title="取消">取消</em>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <!--输入内容-->
+        <div class="vT_bidSearch_addon_con">
+            <div class="vT_bidSearch_addon_block" style="margin-left:0">
+                <p>采购人</p>
+                <input value="" type="text" name="inpBuyerName" id="inpBuyerName">
+            </div>
+            <div class="vT_bidSearch_addon_block">
+                <p>项目编号</p>
+                <input value="" type="text" name="inpProjectId" id="inpProjectId">
+            </div>
+
+            <div class="vT_bidSearch_addon_block" id="zonearea">
+                <p>地区</p>
+                <input value="" type="text" name="inpDisplayZone" id="inpDisplayZone"
+                       readonly="readonly">
+                <input type="hidden" name="inpZoneId" id="inpZoneId">
+
+                <div class="zone_list_container">
+                    <ul class="zone_list" zoneId="">
+                        <li>全部</li>
+                        <li zoneId="11">北京</li>
+                        <li zoneId="12">天津</li>
+                        <li zoneId="13">河北</li>
+
+                        <li zoneId="14">山西</li>
+                        <li zoneId="15">内蒙古</li>
+                        <li zoneId="21 not 2102">辽宁</li>
+                        <li zoneId="2102">大连</li>
+                        <li zoneId="22">吉林</li>
+                        <li zoneId="23">黑龙江</li>
+                        <li zoneId="31">上海</li>
+                        <li zoneId="32">江苏</li>
+
+                        <li zoneId="33 not 3302">浙江</li>
+                        <li zoneId="3302">宁波</li>
+                        <li zoneId="34">安徽</li>
+                        <li zoneId="35 not 3502">福建</li>
+                        <li zoneId="3502">厦门</li>
+                        <li zoneId="36">江西</li>
+
+                        <li zoneId="37 not 3702">山东</li>
+                        <li zoneId="3702">青岛</li>
+                        <li zoneId="41">河南</li>
+                        <li zoneId="42">湖北</li>
+                        <li zoneId="43">湖南</li>
+                        <li zoneId="44 not 4403">广东</li>
+
+                        <li zoneId="4403">深圳</li>
+                        <li zoneId="45">广西</li>
+                        <li zoneId="46">海南</li>
+                        <li zoneId="50">重庆</li>
+                        <li zoneId="51">四川</li>
+                        <li zoneId="52">贵州</li>
+
+                        <li zoneId="53">云南</li>
+                        <li zoneId="54">西藏</li>
+                        <li zoneId="61">陕西</li>
+                        <li zoneId="62">甘肃</li>
+                        <li zoneId="63">青海</li>
+                        <li zoneId="64">宁夏</li>
+
+                        <li zoneId="65">新疆</li>
+                        <li zoneid="66" style="width:121px">新疆生产建设兵团</li>
+                        <li zoneId="71">台湾</li>
+                        <li zoneId="81">香港</li>
+                        <li zoneId="82">澳门</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="vT_bidSearch_addon_block" style="margin-left:0">
+                <p>代理机构</p>
+                <input type="text" name="inpAgentName" id="inpAgentName" value="">
+            </div>
+            <div class="vT_bidSearch_addon_block">
+                <div style="position:relative">
+                    <!--
+                    <div class="code" id="checkCode" style="float:left">
+                        <img onclick="javascript:loadimage();" title="换一张试试" name="randImage" id="randImage"
+                             src="//search.ccgp.gov.cn/ValidateImage">
+                    </div>
+                    <input style="float:left;" type="text" id="inpid" name="inpid" style="border:2px solid #ac0000"/>
+
+                    <div style="position:absolute;width:260px;height:24px;margin-left:205px;margin-top:8px;">请输入左侧验证码
+                    </div>
+                    -->
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+</div>
+<span class="blank20"></span>
+<!---->
+<div class="vT_z">
+    <div style="width:100%;height:30px">
+        
+
+        
+            <!-- something-->
+            <div style="font-size:14px">
+                <p style="float:left">关键字：
+                    <span style="color:#c00000;font-weight:bolder">铜材</span>
+                    
+                        标题检索
+                    
+                    
+                    共找到
+                    <span style="color:#c00000">6</span>
+                    条内容 查询日期从
+                    <span style="color:#c00000"></span>
+                    到
+                    <span style="color:#c00000"></span>
+                </p>
+
+                
+                    <p class="pager">
+                        <script language="javascript">Pager({
+                            size: 1,
+                            current: 0,
+                            prefix: 'data2',
+                            suffix: '.jsp&'
+                        });</script>
+                    </p>
+                
+            </div>
+        
+
+
+    </div>
+
+    
+        <!---->
+        <span class="blank10"></span>
+
+        <div class="vT_z" style="position:relative">
+            <div class="vT-srch-result">
+                <div class="vT-srch-result-list-con2">
+                    <div class="vT-srch-result-list">
+                        <ul class="vT-srch-result-list-bid">
+                            
+
+                                <li>
+                                    <a href="http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202608/t20260827_27219415.htm" style="line-height:18px">
+                                        2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-<font color=red>铜材</font>产线自动化控制建设项目（二次）招标公告
+                                    </a>
+
+                                    <p>项目概况2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-铜材产线自动化控制建设项目（二次）招标项目的潜在投标人应在优质采云采购平台（www.youzhicai.com）获取采购文件，并于2026年9月16日9</p>
+                                    <span>2026.08.27 18:23:28
+                                        | 采购人：铜陵学院
+                                        | 代理机构：安徽省招标集团股份有限公司
+                                        <br/>
+                                        <strong style="font-weight:bolder">
+                                            
+                                            
+                                                公开招标公告
+                                            
+                                        </strong>
+                                        | 安徽
+                                        | <strong style="font-weight:bolder"> </strong>
+                                        
+                                    </span>
+                                </li>
+                            
+
+                                <li>
+                                    <a href="http://www.ccgp.gov.cn/cggg/dfgg/fblbgg/202608/t20260821_27183000.htm" style="line-height:18px">
+                                        2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-<font color=red>铜材</font>产线自动化控制建设项目终止公告
+                                    </a>
+
+                                    <p>一、项目基本情况项目编号：ZF2026-35-0579项目名称：2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-铜材产线自动化控制建设项目二、项目终止原因有效投标人不足规定数量，本次采购终止三、其他</p>
+                                    <span>2026.08.21 17:08:42
+                                        | 采购人：铜陵学院
+                                        | 代理机构：安徽省招标集团股份有限公司
+                                        <br/>
+                                        <strong style="font-weight:bolder">
+                                            
+                                            
+                                                终止公告
+                                            
+                                        </strong>
+                                        | 安徽
+                                        | <strong style="font-weight:bolder"> </strong>
+                                        
+                                    </span>
+                                </li>
+                            
+
+                                <li>
+                                    <a href="http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202608/t20260813_27129618.htm" style="line-height:18px">
+                                        2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-<font color=red>铜材</font>加工智能检测建设项目中标（成交）结果公告
+                                    </a>
+
+                                    <p>2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-铜材加工智能检测建设项目中标（成交）结果公告一、项目编号:2026BFAHZ50392二、项目名称:2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备</p>
+                                    <span>2026.08.13 17:36:17
+                                        | 采购人：铜陵学院
+                                        | 代理机构：安徽公共资源交易集团项目管理有限公司
+                                        <br/>
+                                        <strong style="font-weight:bolder">
+                                            
+                                            
+                                                成交公告
+                                            
+                                        </strong>
+                                        | 安徽
+                                        | <strong style="font-weight:bolder"> 货物</strong>
+                                        
+                                    </span>
+                                </li>
+                            
+
+                                <li>
+                                    <a href="http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202608/t20260805_27075197.htm" style="line-height:18px">
+                                        2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-<font color=red>铜材</font>加工智能检测建设项目更正公告
+                                    </a>
+
+                                    <p>2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-铜材加工智能检测建设项目更正公告一、项目基本情况项目编号：2026BFAHZ50392项目名称：2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更</p>
+                                    <span>2026.08.05 15:10:01
+                                        | 采购人：铜陵学院
+                                        | 代理机构：安徽公共资源交易集团项目管理有限公司
+                                        <br/>
+                                        <strong style="font-weight:bolder">
+                                            
+                                            
+                                                更正公告
+                                            
+                                        </strong>
+                                        | 安徽
+                                        | <strong style="font-weight:bolder"> </strong>
+                                        
+                                    </span>
+                                </li>
+                            
+
+                                <li>
+                                    <a href="http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202607/t20260730_27043041.htm" style="line-height:18px">
+                                        2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-<font color=red>铜材</font>产线自动化控制建设项目招标公告
+                                    </a>
+
+                                    <p>项目概况2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-铜材产线自动化控制建设项目招标项目的潜在投标人应在优质采云采购平台（www.youzhicai.com）获取采购文件，并于2026年8月19日9点30分（</p>
+                                    <span>2026.07.30 19:44:52
+                                        | 采购人：铜陵学院
+                                        | 代理机构：安徽省招标集团股份有限公司
+                                        <br/>
+                                        <strong style="font-weight:bolder">
+                                            
+                                            
+                                                公开招标公告
+                                            
+                                        </strong>
+                                        | 安徽
+                                        | <strong style="font-weight:bolder"> </strong>
+                                        
+                                    </span>
+                                </li>
+                            
+
+                                <li>
+                                    <a href="http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202607/t20260722_26985513.htm" style="line-height:18px">
+                                        2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-<font color=red>铜材</font>加工智能检测建设项目公开招标公告
+                                    </a>
+
+                                    <p>2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-铜材加工智能检测建设项目公开招标公告项目概况2026年铜陵学院铜基新材料与先进制造学科群科研仪器设备更新改造项目-铜材加工智能检测建设项目招</p>
+                                    <span>2026.07.22 16:55:03
+                                        | 采购人：铜陵学院
+                                        | 代理机构：安徽公共资源交易集团项目管理有限公司
+                                        <br/>
+                                        <strong style="font-weight:bolder">
+                                            
+                                            
+                                                公开招标公告
+                                            
+                                        </strong>
+                                        | 安徽
+                                        | <strong style="font-weight:bolder"> 货物</strong>
+                                        
+                                    </span>
+                                </li>
+                            
+
+							
+                        </ul>
+                        
+                            <p class="pager">
+                                <script language="javascript">Pager({
+                                    size: 1,
+                                    current: 0,
+                                    prefix: 'data2',
+                                    suffix: '.jsp&'
+                                });</script>
+                            </p>
+                        
+                    </div>
+                    <div class="vT-srch-result-page-con"></div>
+                </div>
+            </div>
+        </div>
+		
+	<script>
+	
+	var ohtmlurls="http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202608/t20260827_27219415.htm,http://www.ccgp.gov.cn/cggg/dfgg/fblbgg/202608/t20260821_27183000.htm,http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202608/t20260813_27129618.htm,http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202608/t20260805_27075197.htm,http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202607/t20260730_27043041.htm,http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202607/t20260722_26985513.htm,";
+	
+	</script>
+	
+    
+
+    <span class="blank37"></span>
+
+    <div class="vT_nav_cp">
+        <div class="vT_z">
+            <style type="text/css">
+                .copyright_bl{width:960px;margin:0 auto}/*margin-top:20px;*/
+                .vF_cp {width: 960px;margin: 0 auto;text-align: left;float: left;background: #e9e9e9;color: #333;height: 120px;padding-top: 10px;}
+                .vF_cp p {width: 600px;float: left;margin-top: 15px;font-size: 14px;line-height: 26px;}
+                .vF_cp span{font-family:Verdana, Geneva, sans-serif;font-size:12px}
+                .vF_cp a,.vT_cp a{color:#333;text-decoration: none}
+                .vF_cp a:hover,.vT_cp a:hover{text-decoration: underline;color:#ba2636}
+                .dzjg {width: 205px;height: 80px;float: left;margin: 14px 10px 0  130px;border-right: 1px solid #c2c2c2;}
+                .cpright {float: left;width: 570px;margin-left: 15px;}
+                .ccgpjiucuo{width:110px;height:55px;float:left;margin-left:5px;margin-top:10px}
+                </style>
+                <div class="copyright_bl">
+                <div class="vF_cp">
+                    <div class="dzjg">
+                        <div class="ccgpjiucuo">
+                            <a href="https://zfwzgl.www.gov.cn/exposure/jiucuo.html?site_code=bm14000002&amp;url=http%3A%2F%2Fwww.ccgp.gov.cn%2F" target="_blank"><img src="//www.ccgp.gov.cn/img/jiucuo.png"></a>
+                            </div>
+                        <script type="text/javascript">document.write(unescape("%3Cspan id='_ideConac' %3E%3C/span%3E%3Cscript src='https://dcs.conac.cn/js/33/000/0000/60425889/CA330000000604258890010.js' type='text/javascript'%3E%3C/script%3E"));</script></div>
+                <div class="cpright">
+                    <p>
+                    主办单位：中华人民共和国财政部国库司  <br>网站标识码：<span>bm14000002</span> &nbsp;|&nbsp; <a href="https://beian.miit.gov.cn" target="_blank">京<span>ICP</span>备<span>19054529</span>号<span>-1</span></a> &nbsp;|&nbsp; 京公网安备<span>11010602060068</span>号 <br><span id="botm_cpy">&copy; 1999-</span> 中华人民共和国财政部 版权所有 &nbsp;|&nbsp; <a href="//www.ccgp.gov.cn/contact.shtml" target="_blank">联系我们</a> &nbsp;|&nbsp; <a href="//www.ccgp.gov.cn/zxly/" target="_blank">意见反馈</a> </p>
+                </div>
+                </div>
+                </div>
+                <script language="javascript">
+                    var myDate = new Date();
+                    var botmcpy='&copy; 1999-'+ myDate.getFullYear();
+                    $("#botm_cpy").html(botmcpy);
+                </script>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script language="javascript" src="//www.ccgp.gov.cn/images/sa.js"></script>
+<script type="text/javascript" src="/static/js/fixdiv.js"></script>
+<script type="text/javascript" src="/static/js/address.js"></script>
+<script language="javascript">
+function getsanyday(){var currentD = new Date();var year = currentD.getFullYear();var month = currentD.getMonth() + 1;var day = currentD.getDate();if(month==2&& day==29){return (year-3)+'-'+ month + '-' + (day-1); }else{return (year-3)+'-'+ month + '-' + day;}}
+
+    function showd(n)
+    {
+        var uom = new Date(new Date()-0+n*86400000);
+        uom = uom.getFullYear() + "," + (uom.getMonth()+1) + "," + uom.getDate();
+        return uom;
+    }
+    var dayLT=showd(0);
+    var gEndT = dayLT.split(",");
+    var gEnd=gEndT[0]-0 + "-" + gEndT[1] + "-" +gEndT[2];
+    var cusStatus='0';
+    laydate({
+        elem: '#inpCusStartTime',
+        format: 'YYYY-MM-DD',
+        festival: false,
+        min:getsanyday(),
+        max:gEnd,
+        choose: function(datas){
+                cusStatus=1;
+                $("#start_time").val($("#inpCusStartTime").val());
+                console.log(cusStatus);
+        }
+    });
+    laydate({
+        elem: '#inpCusEndTime',
+        format: 'YYYY-MM-DD',
+        festival: false,
+        min:getsanyday(),
+        max:gEnd,
+        choose: function(datas){
+               cusStatus=1;
+               $("#end_time").val($("#inpCusEndTime").val());
+               console.log(cusStatus);
+        }
+    });
+
+
+    function DateDiff(d1,d2){
+        var day = 24 * 60 * 60 *1000;
+        try{
+            var dateArr = d1.split("-");
+            var checkDate = new Date();
+            checkDate.setFullYear(dateArr[0], dateArr[1]-1, dateArr[2]);
+            var checkTime = checkDate.getTime();
+
+            var dateArr2 = d2.split("-");
+            var checkDate2 = new Date();
+            checkDate2.setFullYear(dateArr2[0], dateArr2[1]-1, dateArr2[2]);
+            var checkTime2 = checkDate2.getTime();
+
+            var cha = (checkTime - checkTime2)/day;
+            return cha;
+        }catch(e){
+            return false;
+        }
+    }
+$("document").ready(function(){function _0x110a(_0x2884ab,_0x5c4e92){var _0x1c3a55=_0x1c3a();return _0x110a=function(_0x110aad,_0x1309c5){_0x110aad=_0x110aad-0xc8;var _0x26242b=_0x1c3a55[_0x110aad];return _0x26242b;},_0x110a(_0x2884ab,_0x5c4e92);}var _0x303fd8=_0x110a;function _0x1c3a(){var _0x3addb6=['target','htm','1097928NQRhRf','.vT-srch-result-list-bid\x20li:eq(','1099734seQlNq','3868314ZKSSwJ','length','.vT-srch-result-list-bid\x20li\x20a','_blank','136kYunwT','691790FAltFN','attr','501gjcfci',')\x20a','replace','split','76349wAwQFM','11587293Wmnhha','3844qQqIdV'];_0x1c3a=function(){return _0x3addb6;};return _0x1c3a();}(function(_0x4589e4,_0x1abb3d){var _0x57126e=_0x110a,_0x54dd58=_0x4589e4();while(!![]){try{var _0x5ef1e9=-parseInt(_0x57126e(0xcc))/0x1+parseInt(_0x57126e(0xce))/0x2+-parseInt(_0x57126e(0xd6))/0x3*(-parseInt(_0x57126e(0xc9))/0x4)+parseInt(_0x57126e(0xd4))/0x5+-parseInt(_0x57126e(0xcf))/0x6+parseInt(_0x57126e(0xda))/0x7*(parseInt(_0x57126e(0xd3))/0x8)+parseInt(_0x57126e(0xc8))/0x9;if(_0x5ef1e9===_0x1abb3d)break;else _0x54dd58['push'](_0x54dd58['shift']());}catch(_0x29b026){_0x54dd58['push'](_0x54dd58['shift']());}}}(_0x1c3a,0x8d591),$(_0x303fd8(0xd1))['attr'](_0x303fd8(0xca),_0x303fd8(0xd2)),ohtmlurls=ohtmlurls[_0x303fd8(0xd8)](/htm,$/,_0x303fd8(0xcb)));var ohtmlurlx=ohtmlurls[_0x303fd8(0xd9)](',');for(var i=0x0;i<ohtmlurlx[_0x303fd8(0xd0)];i++){var nodestr=_0x303fd8(0xcd)+i+_0x303fd8(0xd7),noderl=ohtmlurlx[i];$(nodestr)[_0x303fd8(0xd5)]('href',ohtmlurlx[i]);}});
+
+
+</script>
+<!--[if IE 6]>
+<script language="javascript" src="/static/js/DD_belatedPNG_0.0.8a-min.js"></script>
+<script>
+    /* EXAMPLE */
+    DD_belatedPNG.fix('.c_list li,.vT_R_clist li');
+
+    /* string argument can be any CSS selector */
+    /* .png_bg example is unnecessary */
+    /* change it to what suits you! */
+</script>
+<![endif]-->
+</html>

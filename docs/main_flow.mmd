@@ -1,0 +1,21 @@
+%% 灵犀采购 · 主业务 Graph（Orchestrator 主编排）mermaid 流程图
+flowchart LR
+    subgraph Orchestrator["主编排 Orchestrator Agent"]
+        S[START] --> N1[extract_task<br/>任务初始化<br/>锁定 budget_limit]
+        N1 --> N2[market_intelligence<br/>市场情报 Agent]
+        N2 --> N3[cost_planning<br/>成本核算 Agent]
+        N3 --> N4{is_over_budget?<br/>预算红线校验}
+        N4 -- 超支 --> N5[risk_approval<br/>风控 Agent 拦截预警]
+        N5 --> N6[blocked<br/>任务终止 · 转人工]
+        N4 -- 未超支 --> N7[negotiation<br/>谈判博弈 Agent<br/>预算刚性约束]
+        N7 --> N8[risk_approval<br/>风控审批 Agent<br/>三重校验]
+        N8 --> N9[aggregate<br/>结果聚合 · 落库]
+        N9 --> E[END]
+    end
+
+    DB[(MySQL<br/>procurement_task<br/>negotiation_log<br/>cost_plan)]
+    N1 -.读写.-> DB
+    N2 -.读行情/供应商.-> DB
+    N3 -.读库存/行情.-> DB
+    N7 -.写谈判记录.-> DB
+    N9 -.写最终方案.-> DB
