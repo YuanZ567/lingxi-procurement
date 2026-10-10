@@ -1,0 +1,29 @@
+# ============ 打包镜像时排除的文件 ============
+
+# ★ 密钥和本地配置：绝对不进镜像 ★
+.env
+.env.*
+
+# git 相关
+.git
+.gitignore
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 运行数据与日志（运行时才生成，不进镜像；seed_data 是数据源，后端镜像需要）
+chroma_db/
+logs/
+reports/
+
+# 前端依赖和构建产物（前端有自己独立的 Dockerfile，这里排除避免镜像臃肿）
+frontend/node_modules/
+frontend/dist/
+
+# IDE 配置
+.idea/
+.vscode/
+
+.workbuddy

@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis/redis-stack-server:latest
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build: .
+    env_file: .env
+    environment:
+      DB_HOST: mysql          # 覆盖 .env 里的 localhost，指向容器网络
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8001:8000"           # 宿主机 8001 → 容器 8000，配合前端写死的地址
+    volumes:
+      - chroma_data:/app/chroma_db     # 向量库实际落在 /app/chroma_db（代码默认目录），持久化挂这里
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5174:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+  redis_data:
+  chroma_data:
