@@ -61,37 +61,38 @@
 
 ```mermaid
 flowchart TB
-    subgraph FE["🖥️ 前端 · Vue 3 + Vite + Tailwind + ECharts"]
+    subgraph FE["前端 · Vue 3 + Vite + Tailwind + ECharts"]
         UI["数据看板 / 任务控制台"]
         LZ["悬浮助手 灵犀仔"]
     end
 
-    subgraph BE["⚙️ 后端 · FastAPI"]
-        API["REST API<br/>/api/task /api/market /api/suppliers"]
-        SSE["SSE 实时推送<br/>/api/sse/qa /api/sse/progress"]
-        GRAPH["LangGraph 多智能体主图<br/>行情分析 → 风险评估 → 方案生成"]
-        GUARD["NL2SQL 安全闸<br/>危险语句拦截"]
+    subgraph BE["后端 · FastAPI"]
+        API["REST API：/api/task、/api/market、/api/suppliers"]
+        SSE["SSE 实时推送：/api/sse/qa"]
+        GRAPH["LangGraph 多智能体主图：行情分析、风险评估、方案生成"]
+        GUARD["NL2SQL 安全闸"]
     end
 
-    subgraph DS["🗄️ 数据层"]
-        MYSQL[("MySQL 8.4<br/>行情 / 供应商 / 任务")]
-        REDIS[("Redis Stack<br/>行情缓存 + SSE 进度道<br/>+ LangGraph Checkpoint")]
-        CHROMA[("Chroma<br/>制度文档向量库")]
+    subgraph DS["数据层"]
+        MYSQL[("MySQL 8.4：行情、供应商、任务")]
+        REDIS[("Redis Stack：行情缓存、SSE 进度、Checkpoint")]
+        CHROMA[("Chroma：制度文档向量库")]
     end
 
-    LLM["🌐 通义千问<br/>DashScope OpenAI 兼容接口"]
-    AK["🌐 新浪期货盘口<br/>akshare 实时抓取"]
+    LLM["通义千问（DashScope）"]
+    AK["新浪期货盘口（akshare）"]
 
-    UI -- "REST 轮询" --> API
-    LZ -- "SSE 长连接" --> SSE
+    UI -->|REST 轮询| API
+    LZ -->|SSE 长连接| SSE
     API --> GRAPH
     SSE --> GRAPH
-    GRAPH -- "只读 SQL" --> GUARD --> MYSQL
-    GRAPH -- "混合检索" --> CHROMA
+    GRAPH -->|只读 SQL| GUARD
+    GUARD --> MYSQL
+    GRAPH -->|混合检索| CHROMA
     GRAPH --> LLM
-    API -- "实时 / 回补" --> AK
-    API -- "5min 缓存" --> REDIS
-    GRAPH -. "断点续跑" .-> REDIS
+    API -->|实时与历史回补| AK
+    API -->|五分钟缓存| REDIS
+    GRAPH -.->|断点续跑| REDIS
 ```
 
 ## 🧰 技术栈
