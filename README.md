@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🪐 灵犀采购 LingXi-Procure
+# 🪐 灵犀采购 LingXi-procurement
 
-**真实行情 · 真实供应商 · 多智能体执行直播的大宗商品采购助手**
+**真实行情 · 真实供应商 · 多智能体执行直播的大宗商品供应链采购谈判系统**
 
 以 LLM 多智能体流水线重构「行情研判、风险控制、价格谈判」的采购决策链路
 
@@ -114,7 +114,7 @@ flowchart TB
 
 ```bash
 # 1. 克隆 + 配置
-git clone https://github.com/<你的用户名>/lingxi-procure.git
+git clone https://github.com/<你的用户名>/lingxi-procurement.git
 cd lingxi-procure
 cp .env.example .env          # 填入你的 DASHSCOPE_API_KEY，其余默认即可
 
@@ -159,7 +159,7 @@ npm run dev                                            # 前端（Vite 默认 51
 ## 📂 项目结构
 
 ```
-lingxi-procure/
+lingxi-procurement/
 ├── src/
 │   ├── api/            # FastAPI 路由：任务 / SSE / 看板数据
 │   ├── graph/          # LangGraph 多智能体主图与状态定义
