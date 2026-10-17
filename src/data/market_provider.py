@@ -60,27 +60,65 @@ logger = logging.getLogger("market_provider")
 
 # ===================== Redis 缓存连接 =====================
 
+_redis_client = None  # 模块级单例：连接池复用，避免每次请求都重建连接
+
+# redis-py 的 connect 内置"重试+退避"：对拒绝连接的端口 ping 一次能拖 6~8 秒（实测），
+# 这是行情面板慢的真正元凶。这里配"零退避零重试"，失败立刻返回。
+try:
+    from redis.backoff import NoBackoff                    # 不做指数退避
+    from redis.retry import Retry                          # redis-py 的重试控制器
+    _FAST_RETRY = Retry(NoBackoff(), 0)                    # 0 次重试 = 失败立即抛错
+except Exception:                                          # 老版本 redis-py 没有 retry API 也不崩
+    _FAST_RETRY = None
+
 def _get_redis():
     """
     拿一个 Redis 连接（缓存服务器的小本本）。
-    重点：Redis 是"软依赖"——连不上也绝不报错崩溃，返回 None（空），
-    程序自动跳过缓存直接走"上网抓 / 读数据库"，功能照常。
+    重点1：Redis 是"软依赖"——连不上也绝不报错崩溃，返回 None（空），
+           程序自动跳过缓存直接走"上网抓 / 读数据库"，功能照常。
+    重点2：连接是模块级复用的——健康时直接返回旧连接（亚毫秒级）。
+    重点3：先用裸 socket 探活（被拒秒回），再让 redis-py 建连；
+           绝不让 redis-py 自己去撞死端口（它内部重试会把 0 秒的 refused 拖成 6 秒+）。
     返回：Redis 连接对象；连不上返回 None。
     """
+    global _redis_client                   # 要改模块级变量，先声明
+    import os                              # 读取环境变量用
+    host = os.getenv("REDIS_HOST", "127.0.0.1")   # Redis 地址，默认本机
+    port = int(os.getenv("REDIS_PORT", "6379"))   # 端口，默认 6379
+
+    if _redis_client is not None:          # 有旧连接：先试旧连接（连接池复用，几乎零开销）
+        try:
+            _redis_client.ping()           # 探活：旧连接还活着吗（零重试配置下，失败秒回）
+            return _redis_client           # 活着 → 直接复用，这就是快路径
+        except Exception:                  # 旧连接死了（Redis 重启/网络抖动）
+            _redis_client = None           # 丢掉死连接，走下面的重建流程
+
     try:
-        # 创建 Redis 客户端：host=地址，port=端口，db=第几号库，decode_responses=True 表示读出来的是字符串不是二进制
-        # 地址和端口从环境变量读（.env 里配的 REDIS_HOST / REDIS_PORT），读不到就用默认的本机 6379
-        import os  # 在函数内导入 os，只在需要时读取环境变量
-        r = redis.Redis(
-            host=os.getenv("REDIS_HOST", "127.0.0.1"),  # Redis 服务器地址，默认本机
-            port=int(os.getenv("REDIS_PORT", "6379")),  # 端口，默认 6379
-            db=0,               # 用 0 号库（缓存数据放这个库）
-            socket_timeout=2,   # 最多等 2 秒，连不上立刻放弃，不拖慢主流程
-            decode_responses=True,  # 返回值自动转成 Python 字符串
+        # ---- 第一步：裸 socket 探活（create_connection 对 refused 立刻报错，0 开销）----
+        import socket as _s                # 只在这里需要
+        probe = _s.create_connection((host, port), 0.5)   # 0.5 秒探活超时
+        probe.close()                      # 探通就关，真正的连接交给 redis-py
+    except Exception as e:                 # 探活失败 = Redis 不在（拒绝/超时）
+        logger.warning(f"Redis 缓存不可用（裸探失败），跳过缓存：{e}")   # 记警告不报错
+        return None                        # 调用方自动走下一级方案
+
+    try:
+        # ---- 第二步：裸探已通过，redis-py 建连（带零重试配置，绝不再拖时间）----
+        kwargs = dict(                     # 连接参数打包
+            host=host,                     # Redis 服务器地址
+            port=port,                     # 端口
+            db=0,                          # 用 0 号库（缓存数据放这个库）
+            socket_connect_timeout=1,      # 建连最多等 1 秒
+            socket_timeout=1,              # 读写最多等 1 秒
+            decode_responses=True,         # 返回值自动转成 Python 字符串
         )
-        r.ping()  # ping 一下：真的发个消息测试连接通不通（不通会抛异常）
-        return r  # 通了，把连接交出去
-    except Exception as e:  # 连不上、超时、没装 Redis……所有错误都归到这一类
+        if _FAST_RETRY is not None:        # redis-py 版本支持 retry API 才传
+            kwargs["retry"] = _FAST_RETRY  # 零退避零重试：失败立刻返回
+        r = redis.Redis(**kwargs)          # 创建客户端
+        r.ping()                           # 再 ping 一次验证真正可用（此时必然秒回）
+        _redis_client = r                  # 存进模块级单例，下次请求直接复用
+        return r                           # 交出连接
+    except Exception as e:                 # 连不上、超时、没装 Redis……所有错误都归到这一类
         logger.warning(f"Redis 缓存不可用，跳过缓存直接抓实时：{e}")  # 记条警告日志，但不报错
         return None  # 返回空，调用方会自动走下一级方案
 
@@ -137,6 +175,12 @@ def backfill_history(commodity_name):
     图表上会出现一段"跳崖"。本函数用新浪【日线历史】接口把缺的交易日一次拉齐。
     规则：拉全量日线 → 和库内已有日期做差集 → 只插入缺失的（幂等，重复调不产生脏数据）。
     只补最近 400 天，避免全历史重扫。返回：本次补了几条（0 = 无缺口或补失败）。
+
+    【性能闸门（2026-10-17 加）】拉全量日线本身要下载几千行，放在请求路径里就是面板慢的元凶：
+      闸门1【无缺口早退】：先花 5ms 查库内最新日期，最近两天都有数据就说明没断档，
+                          连新浪都不用碰（覆盖周末/节假日：库里是周五的价，周六周日 -2 天内必然命中）；
+      闸门2【半小时节流】：真有断档时，30 分钟内只允许真正拉一次新浪（Redis NX 锁），
+                          防止断档期间每次轮询都白拉一遍全量。
     """
     if not HAS_AKSHARE:                                   # 没装 akshare 直接放弃，降级逻辑照旧
         return 0
@@ -145,6 +189,23 @@ def backfill_history(commodity_name):
         return 0
     try:
         from datetime import timedelta                    # 只在这里需要"400 天前"的换算
+        from sqlalchemy import func                       # max() 聚合要用
+
+        # ---- 闸门1：无缺口早退（一次 5ms 的 max 查询，省一次几千行的全量下载） ----
+        with SessionLocal() as db:
+            latest = db.query(func.max(CommodityPrice.record_date))\
+                       .filter(CommodityPrice.commodity_name == commodity_name).scalar()  # 库内最新行情日期
+        if latest is not None:                            # 库里有数据才谈得上"新不新"
+            if str(latest) >= (date.today() - timedelta(days=2)).isoformat():   # 最近两天已覆盖 → 无断档
+                return 0                                  # 直接走人，不碰网络
+
+        # ---- 闸门2：断档场景 30 分钟节流（Redis NX 锁，Redis 挂了就退化为每次都试） ----
+        r = _get_redis()                                  # 拿缓存连接（复用单例，快）
+        if r is not None:                                 # Redis 可用才有节流能力
+            lock_key = f"market:backfill:{commodity_name}"    # 每个品类一把锁
+            if not r.set(lock_key, "1", ex=1800, nx=True):    # nx=True：锁已存在返回 None → 30 分钟内已试过
+                return 0                                  # 刚试过没补上，别再白拉全量
+
         df = ak.futures_zh_daily_sina(symbol=symbol)      # 新浪日线历史：全部交易日的开高低收
         if df is None or len(df) == 0:
             return 0
@@ -274,6 +335,47 @@ def refresh_market_price(commodity_name):
     return "无数据"  # 告诉调用方：完全没拿到价（业务方自己决定怎么处理）
 
 # ===================== 命令行直接运行时的自测入口 =====================
+
+def quick_source(commodity_name):
+    """
+    【只花几毫秒】快速判断行情"新鲜度徽标"该显示什么，不上网、不拉全量：
+      缓存命中               → "缓存"（5 分钟内刚抓过实时价）
+      库里有今天的价         → "实时"（今天已经抓成功过一次并落库了）
+      库里最新是昨天及以前   → "数据库降级"（今天的实时价还没抓到）
+    给 /api/market 的立即返回用——真正的联网刷新挪到后台任务里做，请求路径零等待。
+    """
+    r = _get_redis()                                       # 拿缓存连接（单例复用，亚毫秒）
+    if r is not None:                                      # Redis 可用才查得到缓存
+        try:
+            if r.get(f"market:price:{commodity_name}"):    # 5 分钟内的缓存还在
+                return "缓存"                              # 徽标显示"缓存"
+        except Exception:                                  # 缓存读失败无所谓，继续往下判
+            pass
+    try:
+        with SessionLocal() as db:                         # 查库：今天这个品类有没有价
+            has_today = (db.query(CommodityPrice.id)
+                           .filter(CommodityPrice.commodity_name == commodity_name,
+                                   CommodityPrice.record_date == date.today())
+                           .first() is not None)           # 有今天记录 → 今天的实时价已落库
+        return "实时" if has_today else "数据库降级"       # 给前端徽标用
+    except Exception as e:                                 # 连库都挂了（极端情况）
+        logger.warning(f"[{commodity_name}] quick_source 查库失败：{e}")
+        return "无数据"                                    # 与原接口的第4级口径一致
+
+def refresh_market_background(commodity_name):
+    """
+    【后台任务专用】把"补历史 + 抓实时"这两件慢事打包，丢给 FastAPI 的 BackgroundTasks 执行。
+    请求路径里绝不调它——这就是 stale-while-revalidate（先用旧数据秒回，后台悄悄刷新）。
+    任何异常都吞掉：后台刷新失败只影响数据新鲜度，绝不能反过来砸了已经返回的响应。
+    """
+    try:
+        backfill_history(commodity_name)                   # 先补历史断档（有闸门，多数情况秒退）
+    except Exception as e:                                 # 补历史失败不拦着抓实时
+        logger.warning(f"[{commodity_name}] 后台回填失败：{e}")
+    try:
+        refresh_market_price(commodity_name)               # 再抓实时价（三级接力内部自带容错）
+    except Exception as e:                                 # 抓实时失败下次轮询再试
+        logger.warning(f"[{commodity_name}] 后台刷新失败：{e}")
 
 # 直接 `python -m src.data.market_provider 螺纹钢` 就能单独测这个模块
 if __name__ == "__main__":

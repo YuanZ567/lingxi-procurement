@@ -53,3 +53,81 @@ def build_answer_user_prompt(question: str, rag_chunks: list, sql_result: dict) 
     material = "\n\n".join(blocks)                 # 拼成完整材料
     return f"用户问题：{question}\n\n【参考资料】\n{material}"            # 交出答题材料
 
+
+# ============================================================
+# 以下为 v2 Agent 化新增（2026-10 追加）：调度脑提示词 + Agent 材料拼接
+# ============================================================
+
+# ===== Agent 调度脑：决定调工具 / 直接答 / 反问 =====
+QA_PLANNER_SYSTEM = """你是采购智能问答助手的调度脑（Agent），每一步只决定"下一步做什么"。
+可用的工具（每步最多选一个）：
+1. search_policy —— 查内部采购制度/规则/流程文档。参数：{"query": "检索词"}
+2. query_database —— 查业务数据库（供应商/历史订单/库存/采购任务/价格明细）。参数：{"question": "一句自然语言数据问题"}
+3. get_market_price —— 查某物料最新市场行情价与近期走势。参数：{"commodity": "物料名，如螺纹钢"}
+
+决策规则（按顺序判断）：
+1. 制度类问题必须查证：凡"怎么办/有什么规定/流程是什么"类问题，必须先调 search_policy 查证后再答，不许凭记忆作答
+2. 缺关键参数才许反问：问题缺物料名/时间范围等关键信息、且对话历史里也找不到时，才允许反问（action=clarify）；
+   能从对话历史里推出来的信息必须自己推，绝不偷懒反问
+3. 信息不够就调工具：当前观察还不足以回答 → 选最合适的一个工具（action=tool）
+4. 同一工具同样参数绝不重复调用；已经拿到足够材料 → 立即作答（action=answer）
+只输出JSON，三选一：
+{"action":"tool","tool":"工具名","args":{...}}
+{"action":"answer"}
+{"action":"clarify","question":"要反问用户的一句话"}"""
+
+
+def build_planner_user_prompt(question: str, history: list, observations: list) -> str:
+    """拼调度脑的"阅卷材料"：用户问题 + 最近对话历史 + 本轮已有观察摘要"""
+    lines = [f"用户问题：{question}"]                 # 第一行永远是本轮问题
+    if history:                                      # 有历史就带上（多轮指代全靠它：如"那铝材呢"）
+        lines.append("\n【对话历史（最近在前）】")
+        for h in history[:6]:                        # 最多带3轮6条，防提示词膨胀
+            who = "用户" if h.get("role") == "user" else "助手"
+            lines.append(f"{who}：{h.get('text', '')[:80]}")
+    if observations:                                 # 有观察就逐条报 note——调度脑判断"够不够"的依据
+        lines.append("\n【本轮已有观察】")
+        for i, obs in enumerate(observations, 1):
+            lines.append(f"{i}. [{obs.get('tool')}] {obs.get('note', '')}")
+    else:
+        lines.append("\n【本轮已有观察】（暂无，还没有调用任何工具）")
+    lines.append("\n请决定下一步，只输出JSON。")
+    return "\n".join(lines)
+
+
+def build_agent_answer_user_prompt(question: str, observations: list, history: list) -> str:
+    """拼答题材料：把观察里的结构化数据编号成"资料块"喂给答题人（SQL结果由程序渲染成表格防幻觉）"""
+    from src.utils.formatter import render_rows_table   # 局部导入避免循环依赖（项目惯例）
+
+    blocks = []                                      # 存资料块文本
+    n = 0                                            # 资料编号计数器
+    for obs in observations or []:                   # 逐条观察拆成资料块
+        data = obs.get("data") or {}
+        if obs.get("tool") == "search_policy":       # 制度片段：每条一块，带来源
+            for c in data.get("chunks") or []:
+                n += 1
+                blocks.append(f"【资料{n}】(来源:{c['source']})\n{c['text']}")
+        elif obs.get("tool") == "query_database":    # SQL结果：程序渲染表格，数字不经LLM的手
+            if data.get("rows"):
+                n += 1
+                table = render_rows_table(data["rows"])
+                blocks.append(f"【资料{n}】(来源:数据库查询 SQL: {data.get('sql', '')})\n{table}")
+        elif obs.get("tool") == "get_market_price":  # 行情：最新价+近10天明细，一行一天
+            if data.get("latest") is not None:
+                n += 1
+                lines = [f"{data.get('commodity')}最新价 {data['latest']} 元，近期走势{data.get('trend', '未知')}，数据来源：{data.get('source', '')}"]
+                for p in (data.get("series") or []):
+                    lines.append(f"{p['date']} 收盘 {p['close']} 元")
+                blocks.append(f"【资料{n}】(来源:实时行情)\n" + "\n".join(lines))
+    if not blocks:                                   # 一轮下来什么都没查到：如实告知
+        blocks.append("【资料】(无)——本轮没有检索到任何可用资料")
+    material = "\n\n".join(blocks)
+
+    history_text = ""                                # 历史段：有才拼，让答题人能接住追问
+    if history:
+        recent = history[-6:]                        # 只看最近3轮
+        history_text = "【对话历史】\n" + "\n".join(
+            f"{'用户' if h.get('role') == 'user' else '助手'}：{h.get('text', '')[:80]}"
+            for h in recent) + "\n\n"
+    return f"{history_text}用户问题：{question}\n\n【参考资料】\n{material}"
+

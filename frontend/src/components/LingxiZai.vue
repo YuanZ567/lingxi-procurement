@@ -2,6 +2,16 @@
 import { ref, computed, onBeforeUnmount } from 'vue'   // ref=响应式变量；computed=计算属性；onBeforeUnmount=组件销毁时清理
 
 const API_BASE = 'http://localhost:8001'      // 后端基地址（8001 端口）
+
+// —— 记忆抽屉号（thread_id）：存 localStorage，刷新页面不丢，同一浏览器始终续同一段对话 ——
+const TID_KEY = 'lingxizai-thread'
+let threadId = localStorage.getItem(TID_KEY)          // 先看上次有没有
+if (!threadId) {                                      // 没有（首次使用）就造一个
+  threadId = crypto.randomUUID
+    ? crypto.randomUUID()                             // 现代浏览器自带的 UUID
+    : Date.now() + '-' + Math.random().toString(36).slice(2)   // 兜底方案
+  localStorage.setItem(TID_KEY, threadId)
+}
 const open = ref(false)                       // 问答窗是否展开（false=收起）
 const messages = ref([                        // 聊天记录，每条 {role:'bot'|'user', text}
   { role: 'bot', text: '你好，我是灵犀仔 ✨ 需要比价、查供应商资质还是看行情？' }
@@ -16,12 +26,12 @@ function ask() {
   if (!q) return                             // 空问题不发了
   messages.value.push({ role: 'user', text: q })  // 先把用户这句显示出来
   input.value = ''                           // 清空输入框
-  messages.value.push({ role: 'bot', text: '思考中…' }) // 先占个“正在想”的气泡
+  messages.value.push({ role: 'bot', text: '灵犀仔正在思考中。。。' }) // 先占个"正在想"的气泡（Agent 循环几轮用户只看到这句）
 
   // 断开上一条还没关的连接，避免叠连接
   if (es) es.close()
-  // 建立 SSE：问号后面拼 question 参数（中文要 encodeURIComponent）
-  es = new EventSource(`${API_BASE}/api/sse/qa?question=${encodeURIComponent(q)}`)
+  // 建立 SSE：问号后面拼 question + thread_id 参数（中文要 encodeURIComponent）
+  es = new EventSource(`${API_BASE}/api/sse/qa?question=${encodeURIComponent(q)}&thread_id=${encodeURIComponent(threadId)}`)
 
   sources.value = []                         // 新问题先清掉上一条的来源卡片
   let answerText = ''                        // 回答正文（后端整条推，前端负责打字机播放）
@@ -33,6 +43,9 @@ function ask() {
     } else if (evt.event === 'answer') {     // 回答正文：接住全文，打字机逐字放（流式观感）
       answerText = String(evt.data)
       typeOut(answerText)                    // 打字机播放，函数见下方
+    } else if (evt.event === 'clarify') {    // 反问轮：后端没给答案、反问用户了
+      answerText = String(evt.data)          // 反问话术照常走打字机播放
+      typeOut(answerText)                    // 用户看到问题直接打字回答 → 同 thread 继续，灵犀仔有上下文
     } else if (evt.event === 'sources') {    // 溯源：存起来，模板里渲染成“来源卡片”
       sources.value = Array.isArray(evt.data) ? evt.data : [String(evt.data)]
     } else if (evt.event === 'end') {        // 结束信号：关连接

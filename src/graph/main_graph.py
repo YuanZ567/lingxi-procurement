@@ -250,7 +250,7 @@ async def cost_calculate_node(state:MainGraphState):
 async def negotiation_node(state:MainGraphState):
      """
      谈判博弈Agent：预算约束下生成多轮谈判策略与博弈话术
-     负责算出谈判报价、锁定供应商、预算保护，目前是数值模拟，还没接入 LLM 谈判话术。
+     负责算出谈判报价、锁定供应商、预算保护。
      """
      new_state=state.copy()
      cost_info=state.get("cost_calc_result",{})  #拿到上一步成本核算节点输出的结果字典
